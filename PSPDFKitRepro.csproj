@@ -1,0 +1,94 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net7.0-ios</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net7.0-windows10.0.19041.0</TargetFrameworks>
+		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
+		<!-- <TargetFrameworks>$(TargetFrameworks);net7.0-tizen</TargetFrameworks> -->
+		<OutputType>Exe</OutputType>
+		<RootNamespace>PSPDFKitRepro</RootNamespace>
+		<UseMaui>true</UseMaui>
+		<SingleProject>true</SingleProject>
+		<ImplicitUsings>enable</ImplicitUsings>
+
+		<!-- Display name -->
+		<ApplicationTitle>PSPDFKitRepro</ApplicationTitle>
+
+		<!-- App Identifier -->
+		<ApplicationId>com.companyname.pspdfkitrepro</ApplicationId>
+		<ApplicationIdGuid>11837adc-b3c3-48fd-9d49-152afa542819</ApplicationIdGuid>
+
+		<!-- Versions -->
+		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+		<ApplicationVersion>1</ApplicationVersion>
+
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-ios|AnyCPU'">
+	  <CreatePackage>false</CreatePackage>
+	</PropertyGroup>
+	<ItemGroup>
+		<!-- App Icon -->
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+
+		<!-- Splash Screen -->
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+
+		<!-- Images -->
+		<MauiImage Include="Resources\Images\*" />
+		<MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
+
+		<!-- Custom Fonts -->
+		<MauiFont Include="Resources\Fonts\*" />
+
+		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
+		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Platforms\MacCatalyst\AppDelegate.cs" />
+	  <Compile Remove="Platforms\MacCatalyst\Program.cs" />
+	  <Compile Remove="Platforms\Tizen\Main.cs" />
+	  <Compile Remove="Platforms\Windows\App.xaml.cs" />
+	  <Compile Remove="Platforms\Android\MainApplication.cs" />
+	  <Compile Remove="Platforms\Android\MainActivity.cs" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="Platforms\MacCatalyst\Info.plist" />
+	  <None Remove="Platforms\Tizen\tizen-manifest.xml" />
+	  <None Remove="Platforms\Windows\Package.appxmanifest" />
+	  <None Remove="Platforms\Windows\app.manifest" />
+	  <None Remove="Platforms\Android\AndroidManifest.xml" />
+	  <None Remove="Platforms\Android\" />
+	  <None Remove="DLLs\PSPDFKit.dotnet.iOS.UI.dll" />
+	  <None Remove="DLLs\PSPDFKit.dotnet.iOS.Model.dll" />
+	  <None Remove="DLLs\PSPDFKit.dotnet.iOS.Instant.dll" />
+	  <None Remove="Handlers\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <MauiXaml Remove="Platforms\Windows\App.xaml" />
+	</ItemGroup>
+	<ItemGroup>
+	  <AndroidResource Remove="Platforms\Android\Resources\values\colors.xml" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Platforms\Android\" />
+	  <Folder Include="Handlers\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Reference Include="PSPDFKit.dotnet.iOS.Instant">
+	    <HintPath>DLLs\PSPDFKit.dotnet.iOS.Instant.dll</HintPath>
+	  </Reference>
+	  <Reference Include="PSPDFKit.dotnet.iOS.Model">
+	    <HintPath>DLLs\PSPDFKit.dotnet.iOS.Model.dll</HintPath>
+	  </Reference>
+	  <Reference Include="PSPDFKit.dotnet.iOS.UI">
+	    <HintPath>DLLs\PSPDFKit.dotnet.iOS.UI.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+</Project>
